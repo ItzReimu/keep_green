@@ -2,7 +2,7 @@ name: Keep_Green
 
 on:
   schedule:
-    - cron: '30 8 * * *'
+    - cron: '0 */4 * * *'
   workflow_dispatch:
 
 jobs:
