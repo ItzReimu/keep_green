@@ -1,31 +1,26 @@
-name: Daily Commit
+name: keep_green
 
 on:
   schedule:
-    - cron: '37 4 * * *'
-  workflow_dispatch:
+    - cron: '40 4 * * *'  # 每天北京时间 12:37 执行
+  workflow_dispatch:       # 允许手动触发
 
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Git
+      - name: Set up Git identity
         run: |
-          git config --global user.name "ItzReimu"
+          git config --global user.name "Itz_Reimu"
           git config --global user.email "itzreimu@outlook.com"
 
-      - name: Update file
-        run: |
-          echo "Updated at $(date)" > update.md
-
-      - name: Commit and push
+      - name: Auto green commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add update.md
-          git commit -m "Daily update: $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git commit --allow-empty -m "a commit a day keeps your girlfriend away"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
-
