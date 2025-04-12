@@ -1,24 +1,31 @@
-name: keep_green
+name: Keep_Green
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    - cron: "12 8 * * *"
+    - cron: '27 8 * * *'  # 每天北京时间 12:37 执行
+  workflow_dispatch:       # 可手动触发
 
 jobs:
-  autogreen:
+  auto-commit:
     runs-on: ubuntu-latest
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v3
 
-      - name: auto_green
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Git
         run: |
-          git config --local user.email "itzruimu@outlook.com"
-          git config --local user.name "ItzReimu"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git pull --rebase
-          git commit --allow-empty -m "keep green"
-          git push
+          git config --global user.name "ItzReimu"
+          git config --global user.email "itzreimu@outlook.com"
+
+      - name: Update file
+        run: |
+          echo "Updated at $(date)" > update.md
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add update.md
+          git commit -m "Daily update: $(date '+%Y-%m-%d %H:%M:%S')" || echo "KeepGreen"
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
