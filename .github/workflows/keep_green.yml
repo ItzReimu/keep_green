@@ -1,0 +1,28 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "ItzReimu"
+          git config --global user.email "itzreimu@outlook.com"
+
+      - name: Update file
+        run: |
+          echo "Updated at $(date)" > update.md
+
+      - name: Commit and push
+        run: |
+          git add update.md
+          git commit -m "Daily update: $(date '+%Y-%m-%d')" || echo "Auto commit"
+          git push
