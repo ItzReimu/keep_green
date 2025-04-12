@@ -2,8 +2,8 @@ name: keep_green
 
 on:
   schedule:
-    - cron: '40 4 * * *'  # 每天北京时间 12:37 执行
-  workflow_dispatch:       # 允许手动触发
+    - cron: '40 4 * * *'
+  workflow_dispatch:
 
 jobs:
   auto-commit:
